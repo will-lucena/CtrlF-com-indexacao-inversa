@@ -1,0 +1,6 @@
+teste	2
+que	1
+ainda	5
+tenho	12
+batata	20
+doce	4
