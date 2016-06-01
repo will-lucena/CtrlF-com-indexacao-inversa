@@ -59,7 +59,7 @@ int main(int argc, char * argv[])
             }
             else if (laFlag)
             {
-                
+                listarAlfabetica("base.txt");
             }
             else
             {

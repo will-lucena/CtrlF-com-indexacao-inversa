@@ -193,7 +193,7 @@ void listarTamanho(const char* log)
 {
     std::cout << ">>> Exibindo base por ordem decrescente de quantidade de palavras <<<" << std::endl;
     Lista lista = carregarBase(log);
-    lista = insertionSort(lista);
+    lista = selectionSortInt(lista);
     for (No p = lista->cabeca->proximo; p != lista->cauda; p = p->proximo)
     {
         std::cout << p->conteudo->caminho << '\t' << p->conteudo->quantidadeDePalavras << std::endl;
@@ -201,7 +201,68 @@ void listarTamanho(const char* log)
     std::cout << ">>> Exibicao finalizada <<<" << std::endl;
 }
 
-Lista insertionSort(Lista lista)
+void listarAlfabetica(const char* log)
 {
-    
+    std::cout << ">>> Exibindo base em ordem alfabetica <<<" << std::endl;
+    Lista lista = carregarBase(log);
+    lista = selectionSortString(lista);
+    for (No p = lista->cabeca->proximo; p != lista->cauda; p = p->proximo)
+    {
+        std::cout << p->conteudo->caminho << '\t' << p->conteudo->quantidadeDePalavras << std::endl;
+    }
+    std::cout << ">>> Exibicao finalizada <<<" << std::endl;
+}
+
+Lista selectionSortInt(Lista lista)
+{
+    for (No busca = lista->cabeca->proximo; busca != lista->cauda; busca = busca->proximo)
+    {
+        No maior = busca;
+        for (No aux = busca->proximo; aux != lista->cauda; aux = aux->proximo)
+        {
+            if (aux->conteudo->quantidadeDePalavras > maior->conteudo->quantidadeDePalavras)
+            {
+                maior = aux;
+            }
+        }
+        if (maior != busca)
+        {
+            int palavrasTmp = maior->conteudo->quantidadeDePalavras;
+            std::string nomeTmp = maior->conteudo->caminho;
+
+            maior->conteudo->quantidadeDePalavras = busca->conteudo->quantidadeDePalavras;
+            maior->conteudo->caminho = busca->conteudo->caminho;
+
+            busca->conteudo->quantidadeDePalavras = palavrasTmp;
+            busca->conteudo->caminho = nomeTmp;
+        }
+    }
+    return lista;
+}
+
+Lista selectionSortString(Lista lista)
+{
+    for (No busca = lista->cabeca->proximo; busca != lista->cauda; busca = busca->proximo)
+    {
+        No menor = busca;
+        for (No aux = busca->proximo; aux != lista->cauda; aux = aux->proximo)
+        {
+            if (aux->conteudo->caminho < menor->conteudo->caminho)
+            {
+                menor = aux;
+            }
+        }
+        if (menor != busca)
+        {
+            int palavrasTmp = menor->conteudo->quantidadeDePalavras;
+            std::string nomeTmp = menor->conteudo->caminho;
+
+            menor->conteudo->quantidadeDePalavras = busca->conteudo->quantidadeDePalavras;
+            menor->conteudo->caminho = busca->conteudo->caminho;
+
+            busca->conteudo->quantidadeDePalavras = palavrasTmp;
+            busca->conteudo->caminho = nomeTmp;
+        }
+    }
+    return lista;
 }

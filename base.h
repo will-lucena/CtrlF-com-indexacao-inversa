@@ -19,8 +19,12 @@ void listarInsercao(const char*);
 
 void listarTamanho(const char*);
 
+void listarAlfabetica(const char*);
+
 void percorrerLinha(std::string, Arquivo);
 
-Lista insertionSort(Lista);
+Lista selectionSortInt(Lista);
+
+Lista selectionSortString(Lista);
 
 #endif // BASE_H_INCLUDED
