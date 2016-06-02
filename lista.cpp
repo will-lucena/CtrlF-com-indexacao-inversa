@@ -1,7 +1,11 @@
 #include "lista.h"
 
-using namespace std;
-
+/**
+ * Funcao para instanciar uma lista e inicializar seus componentes basicos
+ *
+ * @return lista -> retorna a lista criada
+ *
+ */
 Lista criarLista()
 {
 	Lista lista = new tpLista;
@@ -34,6 +38,14 @@ Lista criarLista()
     return lista;
 }
 
+/**
+ * Funcao para instanciar um no com um conteudo passado como parametro e inicializar seus ponteiros
+ *
+ * @param arquivo -> arquivo que será usado como conteudo do no
+ *
+ * @return lista -> retorna a lista criada
+ *
+ */
 No criarNo(Arquivo arquivo)
 {
     No no = new tpNo;
@@ -50,6 +62,12 @@ No criarNo(Arquivo arquivo)
     return no;
 }
 
+/**
+ * Funcao para instanciar um arquivo e inicializar seus componentes basicos
+ *
+ * @return arquivo -> retorna o arquivo criado
+ *
+ */
 Arquivo criarArquivo()
 {
     Arquivo arquivo = new tpArquivo;
@@ -64,18 +82,15 @@ Arquivo criarArquivo()
     return arquivo;
 }
 
-bool vazia(Lista lista)
-{
-	if (lista->tamanho == 0)
-    {
-		return true;
-    }
-	else
-    {
-		return false;
-    }
-}
-
+/**
+ * Funcao para inserir um arquivo na lista
+ *
+ * @param lista -> lista onde será inserido o arquivo
+ * @param arquivo -> arquivo a ser inserido na lista
+ *
+ * @return true se o arquivo tiver sido inserido
+ * 
+ */
 bool inserirNaLista(Lista lista, Arquivo arquivo)
 {
 	No novo = criarNo(arquivo);
@@ -90,9 +105,18 @@ bool inserirNaLista(Lista lista, Arquivo arquivo)
 	return true;
 }
 
+/**
+ * Funcao para remover um arquivo na lista
+ *
+ * @param lista -> lista onde será removido o arquivo
+ * @param arquivo -> arquivo a ser removido na lista
+ *
+ * @return true se o arquivo tiver sido removido, false caso a lista seja vazia ou o arquivo nulo
+ * 
+ */
 bool removerDaLista(Lista lista, Arquivo arquivo)
 {
-    if (lista->tamanho == 0)
+    if (lista->tamanho == 0 || arquivo == NULL)
     {
         return false;
     }

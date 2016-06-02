@@ -1,5 +1,5 @@
-#ifndef LISTA_H_INCLUDED
-#define LISTA_H_INCLUDED
+#ifndef LISTA_H
+#define LISTA_H
 
 #include <iostream>
 #include <cstdlib>
@@ -32,12 +32,10 @@ Lista criarLista();
 
 No criarNo(Arquivo);
 
-bool vazia(Lista);
-
 bool inserirNaLista(Lista, Arquivo);
 
 bool removerDaLista(Lista, Arquivo);
 
 Arquivo criarArquivo();
 
-#endif // LISTA_H_INCLUDED
+#endif // LISTA_H

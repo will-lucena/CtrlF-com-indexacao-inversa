@@ -5,6 +5,14 @@
 
 #include "base.h"
 
+/**
+ * Funcao para mostrar a lista
+ * 
+ * @param lista -> lista que será mostrada 
+ *  
+ * @return void
+ *
+ */
 void show(Lista lista)
 {
     std::cout << ">>> Exibicao da lista iniciada <<<" << std::endl;
@@ -15,6 +23,14 @@ void show(Lista lista)
     std::cout << ">>> Exibicao finalizada <<<" << std::endl;
 }
 
+/**
+ * Funcao para percorrer uma string que contem dois termos divididos por um '\t', separa os dois termos e os armazena em seu respectivo campo do struct
+ *
+ * @param linha -> a string a ser "quebrada"
+ * @param arquivo -> o arquivo que receberá os termos contidos na linha
+ *
+ * @return void
+ */
 void percorrerLinha(std::string linha, Arquivo arquivo)
 {
     std::string buffer = "";
@@ -42,7 +58,14 @@ void percorrerLinha(std::string linha, Arquivo arquivo)
     }
 }
 
-
+/**
+ * Funcao para ler a base de dados armazenada em um .txt e armazena-la em uma lista
+ * 
+ * @param log -> caminho do arquivo .txt onde está a base
+ *
+ * @return lista -> retorna uma lista onde cada nó corresponde a uma linha do arquivo base
+ *
+ */
 Lista carregarBase(const char* log)
 {
     std::cout << ">>> Carregando base <<<" << std::endl;
@@ -73,6 +96,14 @@ Lista carregarBase(const char* log)
     return lista;
 }
 
+/**
+ * Funcao para copiar uma lista, inserindo elemento a elemento da lista base na lista clonada
+ *
+ * @param lista -> a lista que se deseja fazer uma cópia
+ *
+ * @return lista -> uma lista nova que contem os mesmos elementos da antiga
+ *
+ */
 Lista clonarLista(Lista lista)
 {
     std::cout << ">>> Clonando lista <<<" << std::endl;
@@ -86,14 +117,16 @@ Lista clonarLista(Lista lista)
 }
 
 
-/*
-    * Cria um novo stream de saida
-    * insere no arquivo o novo todos os elementos que tinham na base antiga
-    * em seguida insere os novos que foram passados pela linha de comando
-    * optarg = o primeiro paramentro da linha de comando
-    * optind = o indice de onde começa os outros paramentros
-    * fecha o arquivo e retorna o caminho do arquivo criado
-*/
+/**
+ * Funcao para inserir um (ou mais) arquivos vindos do terminal na lista
+ *
+ * @param lista -> lista onde será adicionado/atualizado os arquivos passados pelo terminal
+ * @param caminhos -> vetor de string contendo o/os arquivos que devem ser adicionados a lista
+ * @param quantidadeDeArquivos -> inteiro que informa quantos arquivos serão inseridos
+ * 
+ * @return void
+ *
+ */
 void inserir(Lista lista, std::string* caminhos, int quantidadeDeArquivos)
 {
     std::cout << ">>> Inserindo novo arquivo na base <<<" << std::endl;
@@ -132,6 +165,16 @@ void inserir(Lista lista, std::string* caminhos, int quantidadeDeArquivos)
     std::cout << ">>> Insercao finalizada <<<" << std::endl;
 }
 
+/**
+ * Funcao para remover um (ou mais) arquivos vindos do terminal na lista
+ *
+ * @param lista -> lista onde será removido os arquivos passados pelo terminal
+ * @param caminhos -> vetor de string contendo o/os arquivos que devem ser removidos a lista
+ * @param quantidadeDeArquivos -> inteiro que informa quantos arquivos serão removidos
+ * 
+ * @return void
+ *
+ */
 void remover(Lista lista, std::string* caminhos, int quantidadeDeArquivos)
 {
     std::cout << ">>> Removendo arquivo da base <<<" << std::endl;
@@ -171,13 +214,14 @@ void remover(Lista lista, std::string* caminhos, int quantidadeDeArquivos)
     std::cout << ">>> Remocao finalizada <<<" << std::endl;
 }
 
-
-
-/*
-    * Recebe um arquivo base e abre um stream de leitura com base nesse arquivo
-    * enquanto o arquivo nao chegar ao final (funcao .eof()) imprime a linha atual do arquivo
+/**
+ * Funcao para mostrar a lista pela ordem de inserção
+ * 
+ * @param log -> caminho do arquivo .txt que deverá ser mostrado
+ *
+ * @return void
+ *
  */
-
 void listarInsercao(const char* log)
 {
     std::cout << ">>> Exibindo base por ordem de insercao <<<" << std::endl;
@@ -189,6 +233,14 @@ void listarInsercao(const char* log)
     std::cout << ">>> Exibicao finalizada <<<" << std::endl;
 }
 
+/**
+ * Funcao para mostrar a lista em ordem decrescente com relação a quantidade de palavras de cada arquivo
+ * 
+ * @param log -> caminho do arquivo .txt que deverá ser mostrado
+ *
+ * @return void
+ *
+ */
 void listarTamanho(const char* log)
 {
     std::cout << ">>> Exibindo base por ordem decrescente de quantidade de palavras <<<" << std::endl;
@@ -201,6 +253,14 @@ void listarTamanho(const char* log)
     std::cout << ">>> Exibicao finalizada <<<" << std::endl;
 }
 
+/**
+ * Funcao para mostrar a lista em ordem alfabética
+ * 
+ * @param log -> caminho do arquivo .txt que deverá ser mostrado
+ *
+ * @return void
+ *
+ */
 void listarAlfabetica(const char* log)
 {
     std::cout << ">>> Exibindo base em ordem alfabetica <<<" << std::endl;
@@ -213,7 +273,15 @@ void listarAlfabetica(const char* log)
     std::cout << ">>> Exibicao finalizada <<<" << std::endl;
 }
 
-Lista selectionSortInt(Lista lista)
+/**
+ * Funcao auxiliar que ordena a lista em ordem decrescente
+ *
+ * @param lista -> lista a ser ordenada
+ *
+ * @return void
+ *
+ */
+void selectionSortInt(Lista lista)
 {
     for (No busca = lista->cabeca->proximo; busca != lista->cauda; busca = busca->proximo)
     {
@@ -237,10 +305,17 @@ Lista selectionSortInt(Lista lista)
             busca->conteudo->caminho = nomeTmp;
         }
     }
-    return lista;
 }
 
-Lista selectionSortString(Lista lista)
+/**
+ * Funcao auxiliar que ordena a lista em ordem alfabetica
+ *
+ * @param lista -> lista a ser ordenada
+ *
+ * @return void
+ *
+ */
+void selectionSortString(Lista lista)
 {
     for (No busca = lista->cabeca->proximo; busca != lista->cauda; busca = busca->proximo)
     {
@@ -264,5 +339,4 @@ Lista selectionSortString(Lista lista)
             busca->conteudo->caminho = nomeTmp;
         }
     }
-    return lista;
 }

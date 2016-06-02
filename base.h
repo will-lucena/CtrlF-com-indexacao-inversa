@@ -1,5 +1,5 @@
-#ifndef BASE_H_INCLUDED
-#define BASE_H_INCLUDED
+#ifndef BASE_H
+#define BASE_H
 
 #include <string>
 
@@ -23,8 +23,8 @@ void listarAlfabetica(const char*);
 
 void percorrerLinha(std::string, Arquivo);
 
-Lista selectionSortInt(Lista);
+void selectionSortInt(Lista);
 
-Lista selectionSortString(Lista);
+void selectionSortString(Lista);
 
-#endif // BASE_H_INCLUDED
+#endif // BASE_H
