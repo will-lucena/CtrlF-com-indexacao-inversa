@@ -127,30 +127,17 @@ Lista clonarLista(Lista lista)
  * @return void
  *
  */
-void inserir(Lista lista, std::string* caminhos, int quantidadeDeArquivos)
+void inserir(Lista lista, Arquivo arquivo)
 {
     std::cout << ">>> Inserindo novo arquivo na base <<<" << std::endl;
-    int indice = 0;
-    bool atualizado = false;
-    while (indice < quantidadeDeArquivos)
+    for (No p = lista->cabeca->proximo; p != lista->cauda; p = p->proximo)
     {
-        Arquivo arquivo = criarArquivo();
-        arquivo->caminho = caminhos[indice];
-        for (No p = lista->cabeca->proximo; p != lista->cauda; p = p->proximo)
+        if (arquivo->caminho == p->conteudo->caminho)
         {
-            if (arquivo->caminho == p->conteudo->caminho)
-            {
-                atualizado = removerDaLista(lista, arquivo);
-            }
+            removerDaLista(lista, arquivo);
         }
-        inserirNaLista(lista, arquivo);
-        indice++;
     }
-
-    if (atualizado)
-    {
-        std::cout << "Arquivos foram atualizados" << std::endl;
-    }
+    inserirNaLista(lista, arquivo);
 
     std::ofstream novo;
     novo.open("base.txt");
@@ -175,23 +162,16 @@ void inserir(Lista lista, std::string* caminhos, int quantidadeDeArquivos)
  * @return void
  *
  */
-void remover(Lista lista, std::string* caminhos, int quantidadeDeArquivos)
+void remover(Lista lista, Arquivo arquivo)
 {
     std::cout << ">>> Removendo arquivo da base <<<" << std::endl;
-    int indice = 0;
     bool removido = false;
-    while (indice < quantidadeDeArquivos)
+    for (No p = lista->cabeca->proximo; p != lista->cauda; p = p->proximo)
     {
-        Arquivo arquivo = criarArquivo();
-        arquivo->caminho = caminhos[indice];
-        for (No p = lista->cabeca->proximo; p != lista->cauda; p = p->proximo)
+        if (arquivo->caminho == p->conteudo->caminho)
         {
-            if (arquivo->caminho == p->conteudo->caminho)
-            {
-                removido = removerDaLista(lista, arquivo);
-            }
+            removido = removerDaLista(lista, arquivo);
         }
-        indice++;
     }
 
     if (!removido)
@@ -245,7 +225,7 @@ void listarTamanho(const char* log)
 {
     std::cout << ">>> Exibindo base por ordem decrescente de quantidade de palavras <<<" << std::endl;
     Lista lista = carregarBase(log);
-    lista = selectionSortInt(lista);
+    selectionSortInt(lista);
     for (No p = lista->cabeca->proximo; p != lista->cauda; p = p->proximo)
     {
         std::cout << p->conteudo->caminho << '\t' << p->conteudo->quantidadeDePalavras << std::endl;
@@ -265,7 +245,7 @@ void listarAlfabetica(const char* log)
 {
     std::cout << ">>> Exibindo base em ordem alfabetica <<<" << std::endl;
     Lista lista = carregarBase(log);
-    lista = selectionSortString(lista);
+    selectionSortString(lista);
     for (No p = lista->cabeca->proximo; p != lista->cauda; p = p->proximo)
     {
         std::cout << p->conteudo->caminho << '\t' << p->conteudo->quantidadeDePalavras << std::endl;

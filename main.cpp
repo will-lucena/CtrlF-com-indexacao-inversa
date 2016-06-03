@@ -11,43 +11,42 @@ using namespace std;
 
 int main(int argc, char * argv[])
 {
-	//TabelaDispersao tabela = new tpDispersao;	
-	//tabela = preProcessamento(tabela,"arquivo.txt");
-	//tabela = preProcessamento(tabela,"arquivo2.txt");	
-	//geraLog(tabela);
-	//showTabela(tabela);
-	//*	
-    bool inserirFlag = false;
-    bool removerFlag = false;
-    bool liFlag = false;
-    bool laFlag = false;
-    bool ltFlag = false;
-    bool bANDFlag = false;
-    bool bORFlag = false;
-    bool pAFlag = false;
-    bool pCFlag = false;
-    bool pIFlag = true;
-    bool tTFlag = false;
-    bool tFFlag = true;
+    string terminal[argc-1];
+    int j = 1;
+    for(int i = 0; i < argc-1; i++)
+    {
+        terminal[i] = argv[j];
+        j++;
+    }
 
-    const struct option opcoes[] = {
-        {"i", required_argument, (int*)&inserirFlag, true},
-        {"r", required_argument, (int*)&removerFlag, true},
-        {"li", no_argument, (int*)&liFlag, true},
-        {"la", no_argument, (int*)&laFlag, true},
-        {"lt", no_argument, (int*)&ltFlag, true},
-        {"bAND", required_argument, (int*)&bANDFlag, true},
-        {"bOR", required_argument, (int*)&bORFlag, true},
-        {"pA", required_argument, (int*)&pAFlag, true},
-        {"pC", required_argument, (int*)&pCFlag, true},
-        {"pI", required_argument, (int*)&pIFlag, true},
-        {"tT", no_argument, (int*)&tTFlag, true},
-        {"tF", no_argument, (int*)&tFFlag, true},
-        {NULL, 0, 0, 0}
-    };
+    for(int i = 0; i < argc-1; i++)
+    {
+        cout << terminal[i] << endl;
+    }    
 
-    int index = 0;
+    Lista lista = carregarBase("base.txt");
+    if (terminal[0] == "-i")
+    {
+        cout << "passou" << endl;
+        TabelaDispersao tabela = new tpDispersao;
+        int argumento = 1;
+        while(argumento < argc-1)
+        {
+            cout << "passou1" << endl; 
+            tabela = preProcessamento(tabela,terminal[argumento], lista);
+            cout << "passou" << endl;
+            geraLog(tabela);
+            cout << "passou" << endl;
+            showTabela(tabela);
+            cout << "passou" << endl;
+            argumento++;
+        }
+    }
 
+
+
+
+    /*
     Lista lista = carregarBase("base.txt");
     while (getopt_long_only(argc, argv, "", opcoes, &index) != -1)
     {

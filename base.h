@@ -11,9 +11,9 @@ Lista carregarBase(const char*);
 
 Lista clonarLista(Lista);
 
-void inserir(Lista, std::string*, int);
+void inserir(Lista, Arquivo);
 
-void remover(Lista, std::string*, int);
+void remover(Lista, Arquivo);
 
 void listarInsercao(const char*);
 
