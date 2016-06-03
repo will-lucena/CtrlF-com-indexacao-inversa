@@ -1,18 +1,23 @@
-#include <getopt.h>
 #include <iostream>
 #include <sstream>
 #include <algorithm>
+#include <chrono>
 
 #include "base.h"
 #include "tabelaDispersao.h"
+#include "busca.h"
 
 
 using namespace std;
+using namespace std::chrono;
 
 int main(int argc, char * argv[])
 {
     string terminal[argc-1];
     int j = 1;
+    long double duracao;
+
+
     for(int i = 0; i < argc-1; i++)
     {
         terminal[i] = argv[j];
@@ -25,155 +30,104 @@ int main(int argc, char * argv[])
     }    
 
     Lista lista = carregarBase("base.txt");
+    TabelaDispersao tabela = carregarLog();
     if (terminal[0] == "-i")
     {
-        cout << "passou" << endl;
-        TabelaDispersao tabela = new tpDispersao;
         int argumento = 1;
         while(argumento < argc-1)
-        {
-            cout << "passou1" << endl; 
+        { 
             tabela = preProcessamento(tabela,terminal[argumento], lista);
-            cout << "passou" << endl;
             geraLog(tabela);
-            cout << "passou" << endl;
             showTabela(tabela);
-            cout << "passou" << endl;
             argumento++;
         }
     }
-
-
-
-
-    /*
-    Lista lista = carregarBase("base.txt");
-    while (getopt_long_only(argc, argv, "", opcoes, &index) != -1)
+    /* Ainda nao implementada a remocao da tabela de dispersao
+    else if (terminal[0] == "-r")
     {
-        if (liFlag || laFlag || ltFlag)
+        TabelaDispersao tabela = new tpDispersao;
+        tabela = carregarLog();
+        int argumento = 1;
+        while(argumento < argc-1)
+        { 
+            tabela = preProcessamento(tabela,terminal[argumento], lista);
+            geraLog(tabela);
+            showTabela(tabela);
+            argumento++;
+        }
+    }
+    */
+    else if (terminal[0] == "li")
+    {
+        listarInsercao("base.txt");
+    }
+
+    else if (terminal[0] == "la")
+    {
+        listarAlfabetica("base.txt");
+    }
+
+    else if (terminal[0] == "lt")
+    {
+        listarTamanho("base.txt");
+    }
+
+    else if (terminal[0] == "-bAND")
+    {
+        if (terminal[1] != "pC" && terminal[1] != "pA")
         {
-            if (liFlag)
+            if (terminal[2] == "tT")
             {
-                listarInsercao("base.txt");
-            }
-            else if (laFlag)
-            {
-                listarAlfabetica("base.txt");
+                high_resolution_clock::time_point t1 = high_resolution_clock::now();
+                //listar por ordem de inserção dos arquivos com tempo de busca
+                high_resolution_clock::time_point t2 = high_resolution_clock::now();
+
+                duracao = duration<long double, std::micro>(t2 - t1).count();
             }
             else
             {
-                listarTamanho("base.txt");
+                //listar por ordem de inserção dos arquivos sem tempo de busca
+                int argumento = 2, palavra = 0;
+                string palavras[argc-3];
+                while (argumento < argc-1)
+                {
+                    palavras[palavra] = terminal[argumento];
+                    palavra++;
+                }
+                bAND(tabela, palavras, palavra);
             }
         }
-        else if (inserirFlag)
+        else if (terminal[1] == "pC")
         {
-            string arg = string(optarg);
-            stringstream ss(arg);
-            string item;
-            int numeroDeVirgulas = std::count(arg.begin(), arg.end(), ',');
-            string arquivos[numeroDeVirgulas + 1];
-
-            int index = 0;
-            while (getline(ss, item, ',')) 
+            if (terminal[2] != "tT")
             {
-                arquivos[index] = item;
-                index++;
-            }
+                high_resolution_clock::time_point t1 = high_resolution_clock::now();
+                //listar por ordem decrescente de vezes que aconteceram nos arquivos com tempo de busca
+                high_resolution_clock::time_point t2 = high_resolution_clock::now();
 
-            inserir(lista, arquivos, index);
-            exit(1);
-        }
-        else if (removerFlag)
-        {
-            string arg = string(optarg);
-            stringstream ss(arg);
-            string item;
-            int numeroDeVirgulas = std::count(arg.begin(), arg.end(), ',');
-            string arquivos[numeroDeVirgulas + 1];
-
-            int index = 0;
-            while (getline(ss, item, ','))
-            {
-                arquivos[index] = item;
-                index++;
-            }
-
-            remover(lista, arquivos, index);
-            exit(1);
-        }
-        else if (bANDFlag)
-        {
-            if (pAFlag)
-            {
-                if (tTFlag)
-                {
-                    
-                }
-                else
-                {
-                    
-                }
-            }
-            else if (pCFlag)
-            {
-                if (tTFlag)
-                {
-                    
-                }
-                else
-                {
-
-                }
+                duracao = duration<long double, std::micro>(t2 - t1).count();
             }
             else
             {
-                if (tTFlag)
-                {
-                    
-                }
-                else
-                {
-                    
-                }
+                //listar por ordem decrescente de vezes que aconteceram nos arquivos com tempo de busca
             }
         }
-        else if (bORFlag)
+        else if (terminal[1] == "pA")
         {
-            if (pAFlag)
+            if (terminal[2] != "tT")
             {
-                if (tTFlag)
-                {
-                    
-                }
-                else
-                {
-                    
-                }
-            }
-            else if (pCFlag)
-            {
-                if (tTFlag)
-                {
-                    
-                }
-                else
-                {
-                    
-                }
+                high_resolution_clock::time_point t1 = high_resolution_clock::now();
+                //listar por ordem alfabetica do nome do arquivo com tempo de busca
+                high_resolution_clock::time_point t2 = high_resolution_clock::now();
+
+                duracao = duration<long double, std::micro>(t2 - t1).count();
             }
             else
             {
-                if (tTFlag)
-                {
-                    
-                }
-                else
-                {
-                    
-                }
+                //listar por ordem alfabetica do nome do arquivo com tempo de busca
             }
         }
     }
-    //*/
+
     return 0;
 }
