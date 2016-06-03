@@ -87,12 +87,13 @@ int main(int argc, char * argv[])
             else
             {
                 //listar por ordem de inserção dos arquivos sem tempo de busca
-                int argumento = 2, palavra = 0;
-                string palavras[argc-3];
+                int argumento = 1, palavra = 0;
+                string palavras[argc-2];
                 while (argumento < argc-1)
                 {
                     palavras[palavra] = terminal[argumento];
                     palavra++;
+                    argumento++;
                 }
                 bAND(tabela, palavras, palavra);
             }

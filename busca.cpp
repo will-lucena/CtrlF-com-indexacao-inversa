@@ -7,18 +7,29 @@ ondeExiste encontrarPalavras(TabelaDispersao tabela, string* palavras, int quant
 	for (int i = 0; i < quantidadeDePalavras; i++)
 	{
 		int hash = Hash(preHash(palavras[i]), tabela->tamanhoTabela);
-
-		while(tabela->chave[hash] != "")
+		if (tabela->chave[hash] == palavras[i])
 		{
-			if (tabela->chave[hash] == palavras[i])
+			listaDePalavras->arquivos = tabela->item[hash]->arquivos;
+			listaDePalavras->linhas = tabela->item[hash]->linhas;
+			palavrasValidas++;
+			break;
+		}
+		else
+		{
+			while (tabela->chave[hash] != "")
 			{
-				listaDePalavras = tabela->item[hash];
-				palavrasValidas++;
-				break;
-			}
-			else
-			{
-				hash++;
+				
+				if (tabela->chave[hash].find(palavras[i]) != -1)
+				{
+					listaDePalavras->arquivos = tabela->item[hash]->arquivos;
+					listaDePalavras->linhas = tabela->item[hash]->linhas;
+					palavrasValidas++;
+					break;
+				}
+				else
+				{
+					hash = (hash+1) % tabela->tamanhoTabela;
+				}
 			}
 		}
 	}
@@ -28,7 +39,13 @@ ondeExiste encontrarPalavras(TabelaDispersao tabela, string* palavras, int quant
 void bAND(TabelaDispersao tabela, string* palavras, int quantidadeDePalavras)
 {
 	ondeExiste listaDePalavras = encontrarPalavras(tabela, palavras, quantidadeDePalavras);
-	cout << listaDePalavras->arquivos << '\t' <<  listaDePalavras->linhas << endl;
+	int i = 0;
+	while (i < tabela->qtdArquivos)
+	{
+		cout << listaDePalavras->arquivos[i] << '\t';
+		cout << listaDePalavras->linhas[i] << endl;
+		i++;
+	}
 }
 
 
