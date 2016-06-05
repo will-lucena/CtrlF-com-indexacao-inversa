@@ -99,7 +99,7 @@ TabelaDispersao preProcessamento(TabelaDispersao tabela, std::string nomeArquivo
     string linhas,palavra;    
     char vLinha[10];
     int cont=0,sub,valorLinha=0, contadorDePalavras = 0;
-    ifstream ss(nomeArquivo);
+	ifstream ss(nomeArquivo);
     if (ss.is_open()){        	
     	while (!ss.eof()){
     		getline(ss, linhas);

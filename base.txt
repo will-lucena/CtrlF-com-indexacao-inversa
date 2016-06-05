@@ -1,3 +1,2 @@
 arquivo.txt	375
 arquivo2.txt	492
-arquivo3.txt	34

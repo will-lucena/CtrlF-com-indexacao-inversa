@@ -38,7 +38,7 @@ int main(int argc, char * argv[])
         { 
             tabela = preProcessamento(tabela,terminal[argumento], lista);
             geraLog(tabela);
-            showTabela(tabela);
+            //showTabela(tabela);
             argumento++;
         }
     }
@@ -95,7 +95,7 @@ int main(int argc, char * argv[])
                     palavra++;
                     argumento++;
                 }
-                bAND(tabela, palavras, palavra);
+                bAND(tabela, palavras, palavra, lista);
             }
         }
         else if (terminal[1] == "pC")

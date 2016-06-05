@@ -8,6 +8,7 @@
 struct tpArquivo
 {
 	std::string caminho;
+	std::string* texto;
 	int quantidadeDePalavras;
 };
 typedef tpArquivo* Arquivo;
@@ -37,5 +38,4 @@ bool inserirNaLista(Lista, Arquivo);
 bool removerDaLista(Lista, Arquivo);
 
 Arquivo criarArquivo();
-
 #endif // LISTA_H
