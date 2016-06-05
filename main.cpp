@@ -95,7 +95,7 @@ int main(int argc, char * argv[])
                     palavra++;
                     argumento++;
                 }
-                bAND(tabela, palavras, palavra, lista);
+                bAND(tabela, palavras, palavra);
             }
         }
         else if (terminal[1] == "pC")

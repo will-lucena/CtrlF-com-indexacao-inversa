@@ -8,10 +8,8 @@
 
 using namespace std;
 
-void bAND(TabelaDispersao, string*, int, Lista);
+void bAND(TabelaDispersao, string*, int);
 
-void mostrarLinha(Lista, ondeExiste, TabelaDispersao);
-
-void lerTexto(Arquivo, std::string, int);
+void mostrarLinha(ondeExiste palavra, int* linhas, int quantasLinhas, int arquivo);
 
 #endif
