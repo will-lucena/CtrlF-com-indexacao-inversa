@@ -1,0 +1,1 @@
+textos_base/arquivo.txt	375
