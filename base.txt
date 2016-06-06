@@ -1,2 +1,0 @@
-arquivo.txt	375
-arquivo2.txt	492
