@@ -1,57 +1,36 @@
 #include <iostream>
 #include <fstream>
-#include <string>
 #include <sstream>
 
-#include "base.h"
-
-/**
- * Funcao para mostrar a lista
- * 
- * @param lista -> lista que será mostrada 
- *  
- * @return void
- *
- */
-void show(Lista lista)
-{
-    std::cout << ">>> Exibicao da lista iniciada <<<" << std::endl;
-    for (No p = lista->cabeca->proximo; p != lista->cauda; p = p->proximo)
-    {
-        std::cout << p->conteudo->caminho << std::endl;
-    }
-    std::cout << ">>> Exibicao finalizada <<<" << std::endl;
-}
+#include "libs/base.h"
 
 /**
  * Funcao para percorrer uma string que contem dois termos divididos por um '\t', separa os dois termos e os armazena em seu respectivo campo do struct
- *
  * @param linha -> a string a ser "quebrada"
  * @param arquivo -> o arquivo que receberá os termos contidos na linha
- *
  * @return void
  */
 void percorrerLinha(std::string linha, Arquivo arquivo)
 {
     std::string buffer = "";
     bool divisor = false;
-    for (int i = 0; i < linha.length(); i++)
+    for (int index = 0; index < linha.length(); index++)
     {
-        if (!divisor && linha[i] != '\t')
+        if (!divisor && linha[index] != '\t')
         {
-            buffer = buffer + linha[i];
+            buffer = buffer + linha[index];
         }
-        if (linha[i] == '\t')
+        else if (linha[index] == '\t')
         {
             arquivo->caminho = buffer;
             divisor = true;
             buffer = "";
         }
-        if (divisor && linha[i] != '\n')
+        else if (divisor && linha[index] != '\n')
         {
-            buffer = buffer + linha[i];
+            buffer = buffer + linha[index];
         }
-        if (i == linha.length()-1)
+        else if (index == linha.length()-1)
         {
             arquivo->quantidadeDePalavras = std::stoi(buffer);
         }
@@ -60,31 +39,27 @@ void percorrerLinha(std::string linha, Arquivo arquivo)
 
 /**
  * Funcao para ler a base de dados armazenada em um .txt e armazena-la em uma lista
- * 
- * @param log -> caminho do arquivo .txt onde está a base
- *
+ * @param base -> caminho do arquivo .txt onde está a base
  * @return lista -> retorna uma lista onde cada nó corresponde a uma linha do arquivo base
- *
  */
-Lista carregarBase(const char* log)
+Lista carregarBase(const char* base)
 {
-    std::cout << ">>> Carregando base <<<" << std::endl;
     Lista lista = criarLista();
     //*
-    std::string line = "";
+    std::string linha = "";
     std::ifstream abrir;
-    abrir.open(log);
+    abrir.open(base);
     if (abrir.is_open())
     {
         while (!abrir.eof())
         {
-            getline(abrir, line);
+            getline(abrir, linha);
             {
-                if (line != "")
+                if (linha != "")
                 {
                     Arquivo arquivo = criarArquivo();
-                    arquivo->caminho = line;
-                    percorrerLinha(line, arquivo);
+                    arquivo->caminho = linha;
+                    percorrerLinha(linha, arquivo);
                     inserirNaLista(lista, arquivo);
                 }  
             }  
@@ -92,176 +67,135 @@ Lista carregarBase(const char* log)
     }
     abrir.close();
     /**/
-    std::cout << ">>> Base carregada <<<" << std::endl;
     return lista;
 }
 
 /**
- * Funcao para copiar uma lista, inserindo elemento a elemento da lista base na lista clonada
- *
- * @param lista -> a lista que se deseja fazer uma cópia
- *
- * @return lista -> uma lista nova que contem os mesmos elementos da antiga
- *
- */
-Lista clonarLista(Lista lista)
-{
-    std::cout << ">>> Clonando lista <<<" << std::endl;
-    Lista clonada = criarLista();
-    for (No p = lista->cabeca->proximo; p != lista->cauda; p = p->proximo)
-    {
-        inserirNaLista(clonada, p->conteudo);
-    }
-    std::cout << ">>> Clonagem finalizada <<<" << std::endl;
-    return clonada;
-}
-
-
-/**
  * Funcao para inserir um (ou mais) arquivos vindos do terminal na lista
- *
  * @param lista -> lista onde será adicionado/atualizado os arquivos passados pelo terminal
  * @param caminhos -> vetor de string contendo o/os arquivos que devem ser adicionados a lista
  * @param quantidadeDeArquivos -> inteiro que informa quantos arquivos serão inseridos
- * 
  * @return void
- *
  */
-void inserir(Lista lista, Arquivo arquivo)
+void inserirNaBase(Lista lista, Arquivo arquivo)
 {
-    std::cout << ">>> Inserindo novo arquivo na base <<<" << std::endl;
-    for (No p = lista->cabeca->proximo; p != lista->cauda; p = p->proximo)
+    bool atualizado = false;
+    for (No index = lista->cabeca->proximo; index != lista->cauda; index = index->proximo)
     {
-        if (arquivo->caminho == p->conteudo->caminho)
+        if (arquivo->caminho == index->conteudo->caminho)
         {
             removerDaLista(lista, arquivo);
+            atualizado = true;
+            std::cout << "\t>> Arquivo """ << arquivo->caminho << """ ja estava na base de buscas." << std::endl;
+            std::cout << "\tSeu registro foi atualizado." << std::endl;
         }
     }
-    inserirNaLista(lista, arquivo);
 
-    std::ofstream novo;
-    novo.open("base.txt");
-    if (novo.is_open())
+    inserirNaLista(lista, arquivo);
+    if (!atualizado)
     {
-        for (No p = lista->cabeca->proximo; p != lista->cauda; p = p->proximo)
+        std::cout << "\t>> Arquivo """ << arquivo->caminho << """ inserido na base de buscas." << std::endl;
+    } 
+
+    std::ofstream base;
+    base.open("arquivos_gerados/base.txt");
+    if (base.is_open())
+    {
+        for (No index = lista->cabeca->proximo; index != lista->cauda; index = index->proximo)
         {
-            novo << p->conteudo->caminho << '\t' << p->conteudo->quantidadeDePalavras << std::endl;
+            base << index->conteudo->caminho << '\t' << index->conteudo->quantidadeDePalavras << std::endl;
         }
-        novo.close();
+        base.close();
     }
-    std::cout << ">>> Insercao finalizada <<<" << std::endl;
 }
 
 /**
  * Funcao para remover um (ou mais) arquivos vindos do terminal na lista
- *
  * @param lista -> lista onde será removido os arquivos passados pelo terminal
  * @param caminhos -> vetor de string contendo o/os arquivos que devem ser removidos a lista
  * @param quantidadeDeArquivos -> inteiro que informa quantos arquivos serão removidos
- * 
  * @return void
- *
  */
-void remover(Lista lista, Arquivo arquivo)
+void removerDaBase(Lista lista, Arquivo arquivo)
 {
-    std::cout << ">>> Removendo arquivo da base <<<" << std::endl;
     bool removido = false;
-    for (No p = lista->cabeca->proximo; p != lista->cauda; p = p->proximo)
+    for (No index = lista->cabeca->proximo; index != lista->cauda; index = index->proximo)
     {
-        if (arquivo->caminho == p->conteudo->caminho)
+        if (arquivo->caminho == index->conteudo->caminho)
         {
             removido = removerDaLista(lista, arquivo);
+            std::cout << "\t>> Arquivo " << arquivo->caminho << " removido da base de buscas." << std::endl;
         }
     }
 
     if (!removido)
     {
-        std::cout << "Arquivo nao existe na base de dados" << std::endl;
-        std::cout << ">>> Remocao cancelada <<<" << std::endl;
+        std::cout << "\t>> Arquivo " << arquivo->caminho << " nao estava na base de buscas." << std::endl;
         exit(-1);
     }
 
-    std::ofstream novo;
-    novo.open("base.txt");
-    if (novo.is_open())
+    std::ofstream base;
+    base.open("arquivos_gerados/base.txt");
+    if (base.is_open())
     {
-        for (No p = lista->cabeca->proximo; p != lista->cauda; p = p->proximo)
+        for (No index = lista->cabeca->proximo; index != lista->cauda; index = index->proximo)
         {
-            novo << p->conteudo->caminho << '\t' << p->conteudo->quantidadeDePalavras << std::endl;
+            base << index->conteudo->caminho << '\t' << index->conteudo->quantidadeDePalavras << std::endl;
         }
-        novo.close();
+        base.close();
     }
-    std::cout << ">>> Remocao finalizada <<<" << std::endl;
 }
 
 /**
  * Funcao para mostrar a lista pela ordem de inserção
- * 
  * @param log -> caminho do arquivo .txt que deverá ser mostrado
- *
  * @return void
- *
  */
-void listarInsercao(const char* log)
+void listarInsercao(Lista lista)
 {
-    std::cout << ">>> Exibindo base por ordem de insercao <<<" << std::endl;
-    Lista lista = carregarBase(log);
-    for (No p = lista->cabeca->proximo; p != lista->cauda; p = p->proximo)
+    std::cout << "\t>> Arquivos contidos na base de buscas" << std::endl;
+    for (No index = lista->cabeca->proximo; index != lista->cauda; index = index->proximo)
     {
-        std::cout << p->conteudo->caminho << '\t' << p->conteudo->quantidadeDePalavras << std::endl;
+        std::cout << "\t\t- " << index->conteudo->caminho << std::endl;
     }
-    std::cout << ">>> Exibicao finalizada <<<" << std::endl;
 }
 
 /**
  * Funcao para mostrar a lista em ordem decrescente com relação a quantidade de palavras de cada arquivo
- * 
  * @param log -> caminho do arquivo .txt que deverá ser mostrado
- *
  * @return void
- *
  */
-void listarTamanho(const char* log)
+void listarTamanho(Lista lista)
 {
-    std::cout << ">>> Exibindo base por ordem decrescente de quantidade de palavras <<<" << std::endl;
-    Lista lista = carregarBase(log);
-    selectionSortInt(lista);
-    for (No p = lista->cabeca->proximo; p != lista->cauda; p = p->proximo)
+    std::cout << "\t>> Arquivos contidos na base de buscas" << std::endl;
+    selectionSortDecrescente(lista);
+    for (No index = lista->cabeca->proximo; index != lista->cauda; index = index->proximo)
     {
-        std::cout << p->conteudo->caminho << '\t' << p->conteudo->quantidadeDePalavras << std::endl;
+        std::cout << "\t\t- " << index->conteudo->caminho << std::endl;
     }
-    std::cout << ">>> Exibicao finalizada <<<" << std::endl;
 }
 
 /**
  * Funcao para mostrar a lista em ordem alfabética
- * 
  * @param log -> caminho do arquivo .txt que deverá ser mostrado
- *
  * @return void
- *
  */
-void listarAlfabetica(const char* log)
+void listarAlfabetica(Lista lista)
 {
-    std::cout << ">>> Exibindo base em ordem alfabetica <<<" << std::endl;
-    Lista lista = carregarBase(log);
-    selectionSortString(lista);
-    for (No p = lista->cabeca->proximo; p != lista->cauda; p = p->proximo)
+    std::cout << "\t>> Arquivos contidos na base de buscas" << std::endl;
+    selectionSortCrescente(lista);
+    for (No index = lista->cabeca->proximo; index != lista->cauda; index = index->proximo)
     {
-        std::cout << p->conteudo->caminho << '\t' << p->conteudo->quantidadeDePalavras << std::endl;
+        std::cout << "\t\t- " << index->conteudo->caminho << std::endl;
     }
-    std::cout << ">>> Exibicao finalizada <<<" << std::endl;
 }
 
 /**
  * Funcao auxiliar que ordena a lista em ordem decrescente
- *
  * @param lista -> lista a ser ordenada
- *
  * @return void
- *
  */
-void selectionSortInt(Lista lista)
+void selectionSortDecrescente(Lista lista)
 {
     for (No busca = lista->cabeca->proximo; busca != lista->cauda; busca = busca->proximo)
     {
@@ -289,13 +223,10 @@ void selectionSortInt(Lista lista)
 
 /**
  * Funcao auxiliar que ordena a lista em ordem alfabetica
- *
  * @param lista -> lista a ser ordenada
- *
  * @return void
- *
  */
-void selectionSortString(Lista lista)
+void selectionSortCrescente(Lista lista)
 {
     for (No busca = lista->cabeca->proximo; busca != lista->cauda; busca = busca->proximo)
     {

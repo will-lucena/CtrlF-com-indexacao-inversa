@@ -1,7 +1,7 @@
 #include <algorithm>
 
-#include "busca.h"
-#include "lista.h"
+#include "libs/busca.h"
+#include "libs/lista.h"
 
 ondeExiste encontrarPalavras(TabelaDispersao tabela, string palavra)
 {
@@ -49,6 +49,7 @@ void bAND(TabelaDispersao tabela, string* palavras, int quantidadeDePalavras)
 {
 	//implementar com mais de uma palavra
 	//*
+	cout << palavras[0] << endl;
 	int* linhasASeremExibidas;
 	int cont = 0;
 	for (int i = 0; i < quantidadeDePalavras; i++)

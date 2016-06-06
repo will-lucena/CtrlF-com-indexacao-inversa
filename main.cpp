@@ -3,9 +3,9 @@
 #include <algorithm>
 #include <chrono>
 
-#include "base.h"
-#include "tabelaDispersao.h"
-#include "busca.h"
+#include "libs/base.h"
+#include "libs/tabelaDispersao.h"
+#include "libs/busca.h"
 
 
 using namespace std;
@@ -29,7 +29,7 @@ int main(int argc, char * argv[])
         cout << terminal[i] << endl;
     }    
 
-    Lista lista = carregarBase("base.txt");
+    Lista lista = carregarBase("arquivos_gerados/base.txt");
     TabelaDispersao tabela = carregarLog();
     if (terminal[0] == "-i")
     {
@@ -57,35 +57,36 @@ int main(int argc, char * argv[])
         }
     }
     */
-    else if (terminal[0] == "li")
+    else if (terminal[0] == "-li")
     {
-        listarInsercao("base.txt");
+        listarInsercao(lista);
     }
 
-    else if (terminal[0] == "la")
+    else if (terminal[0] == "-la")
     {
-        listarAlfabetica("base.txt");
+        listarAlfabetica(lista);
     }
 
-    else if (terminal[0] == "lt")
+    else if (terminal[0] == "-lt")
     {
-        listarTamanho("base.txt");
+        listarTamanho(lista);
     }
 
     else if (terminal[0] == "-bAND")
     {
-        if (terminal[1] != "pC" && terminal[1] != "pA")
+        cout << "oi" << endl;
+        if (terminal[1] != "-pC" && terminal[1] != "-pA")
         {
-            if (terminal[2] == "tT")
+            /*if (terminal[2] == "-tT")
             {
                 high_resolution_clock::time_point t1 = high_resolution_clock::now();
                 //listar por ordem de inserção dos arquivos com tempo de busca
                 high_resolution_clock::time_point t2 = high_resolution_clock::now();
 
                 duracao = duration<long double, std::micro>(t2 - t1).count();
-            }
-            else
-            {
+            }*/
+            //else
+            //{
                 //listar por ordem de inserção dos arquivos sem tempo de busca
                 int argumento = 1, palavra = 0;
                 string palavras[argc-2];
@@ -96,11 +97,11 @@ int main(int argc, char * argv[])
                     argumento++;
                 }
                 bAND(tabela, palavras, palavra);
-            }
+            //}
         }
-        else if (terminal[1] == "pC")
+        else if (terminal[1] == "-pC")
         {
-            if (terminal[2] != "tT")
+            if (terminal[2] != "-tT")
             {
                 high_resolution_clock::time_point t1 = high_resolution_clock::now();
                 //listar por ordem decrescente de vezes que aconteceram nos arquivos com tempo de busca
@@ -113,9 +114,9 @@ int main(int argc, char * argv[])
                 //listar por ordem decrescente de vezes que aconteceram nos arquivos com tempo de busca
             }
         }
-        else if (terminal[1] == "pA")
+        else if (terminal[1] == "-pA")
         {
-            if (terminal[2] != "tT")
+            if (terminal[2] != "-tT")
             {
                 high_resolution_clock::time_point t1 = high_resolution_clock::now();
                 //listar por ordem alfabetica do nome do arquivo com tempo de busca

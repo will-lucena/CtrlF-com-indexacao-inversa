@@ -1,4 +1,4 @@
-#include "tabelaDispersao.h"
+#include "libs/tabelaDispersao.h"
 
 using namespace std;
 /*
@@ -128,9 +128,11 @@ TabelaDispersao preProcessamento(TabelaDispersao tabela, std::string nomeArquivo
     	Arquivo arquivo = criarArquivo();
     	arquivo->caminho = nomeArquivo;
     	arquivo->quantidadeDePalavras = contadorDePalavras;
-    	inserir(lista, arquivo);     	
+    	inserirNaBase(lista, arquivo);     	
     	ss.close();    	  
     }else{
+    	std::cout << "\t>> Arquivo """ << nomeArquivo << """ nao foi encontrado no caminho passado." << std::endl;
+        exit(-1);
     	return tabela;
     }
     return tabela;
@@ -154,7 +156,7 @@ void showTabela(TabelaDispersao tabela){
 
 void geraLog(TabelaDispersao tabela){
 	int palavras,ondeExiste;
-	ofstream ss("Log.txt");
+	ofstream ss("arquivos_gerados/log.txt");
     if (ss.is_open()){ 
     	ss<<tabela->tamanhoTabela<<" "<<tabela->qtdArquivos<<endl;        	
     	for(palavras=0;palavras<tabela->tamanhoTabela;palavras++){
@@ -184,7 +186,7 @@ TabelaDispersao carregarLog(){
 	TabelaDispersao tabela = new tpDispersao;
 	int posicao=0,tamanho,nchave;	
 	string conteudolinhas,palavra;
-	ifstream ss("Log.txt");
+	ifstream ss("arquivos_gerados/log.txt");
     if (ss.is_open()){        	    	
     	getline(ss, conteudolinhas,' ');    	
     	tamanho = atoi(conteudolinhas.c_str());    	
@@ -238,10 +240,6 @@ TabelaDispersao carregarLog(){
     	return tabela;
     }
 }
-
-
-
-
 
 int preHash(string nome){
 	int chave=0;
