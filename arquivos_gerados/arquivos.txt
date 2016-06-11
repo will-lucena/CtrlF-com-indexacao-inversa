@@ -1,0 +1,1 @@
+nessa pasta será armazenado os arquivos gerados para o pre-processamento: log.txt e base.txt
