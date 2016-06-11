@@ -146,6 +146,39 @@ void removerDaBase(Lista lista, Arquivo arquivo)
     }
 }
 
+void removerDaBase(Lista lista, std::string arquivo)
+{
+    bool removido = false;
+    for (No index = lista->cabeca->proximo; index != lista->cauda; index = index->proximo)
+    {
+        if (arquivo == index->conteudo->caminho)
+        {
+            Arquivo arquivo = new tpArquivo;
+            arquivo->caminho = index->conteudo->caminho;
+            arquivo->quantidadeDePalavras = index->conteudo->quantidadeDePalavras;
+            removido = removerDaLista(lista, arquivo);
+            std::cout << "\t>> Arquivo " << arquivo->caminho << " removido da base de buscas." << std::endl;
+        }
+    }
+
+    if (!removido)
+    {
+        std::cout << "\t>> Arquivo " << arquivo << " nao estava na base de buscas." << std::endl;
+        exit(-1);
+    }
+
+    std::ofstream base;
+    base.open("arquivos_gerados/base.txt");
+    if (base.is_open())
+    {
+        for (No index = lista->cabeca->proximo; index != lista->cauda; index = index->proximo)
+        {
+            base << index->conteudo->caminho << '\t' << index->conteudo->quantidadeDePalavras << std::endl;
+        }
+        base.close();
+    }
+}
+
 /**
  * Funcao para mostrar a lista pela ordem de inserção
  * @param log -> caminho do arquivo .txt que deverá ser mostrado

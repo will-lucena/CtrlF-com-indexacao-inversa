@@ -5,8 +5,6 @@
 
 #include "libs/base.h"
 #include "libs/tabelaDispersao.h"
-#include "libs/busca.h"
-
 
 using namespace std;
 using namespace std::chrono;
@@ -28,9 +26,10 @@ int main(int argc, char * argv[])
     {
         cout << terminal[i] << endl;
     }    
-
+    
     Lista lista = carregarBase("arquivos_gerados/base.txt");
-    TabelaDispersao tabela = carregarLog();
+    TabelaDispersao tabela = carregarLog("arquivos_gerados/Log.txt");
+    
     if (terminal[0] == "-i")
     {
         int argumento = 1;
@@ -42,21 +41,17 @@ int main(int argc, char * argv[])
             argumento++;
         }
     }
-    /* Ainda nao implementada a remocao da tabela de dispersao
+    //* Ainda nao implementada a remocao da tabela de dispersao
     else if (terminal[0] == "-r")
     {
-        TabelaDispersao tabela = new tpDispersao;
-        tabela = carregarLog();
         int argumento = 1;
         while(argumento < argc-1)
         { 
-            tabela = preProcessamento(tabela,terminal[argumento], lista);
-            geraLog(tabela);
-            showTabela(tabela);
+            removerDaTabela(tabela,terminal[argumento], lista);
             argumento++;
         }
     }
-    */
+    /**/
     else if (terminal[0] == "-li")
     {
         listarInsercao(lista);
@@ -71,22 +66,22 @@ int main(int argc, char * argv[])
     {
         listarTamanho(lista);
     }
-
+    /*
     else if (terminal[0] == "-bAND")
     {
         cout << "oi" << endl;
         if (terminal[1] != "-pC" && terminal[1] != "-pA")
         {
-            /*if (terminal[2] == "-tT")
+            if (terminal[2] == "-tT")
             {
                 high_resolution_clock::time_point t1 = high_resolution_clock::now();
                 //listar por ordem de inserção dos arquivos com tempo de busca
                 high_resolution_clock::time_point t2 = high_resolution_clock::now();
 
                 duracao = duration<long double, std::micro>(t2 - t1).count();
-            }*/
-            //else
-            //{
+            }
+            else
+            {
                 //listar por ordem de inserção dos arquivos sem tempo de busca
                 int argumento = 1, palavra = 0;
                 string palavras[argc-2];
@@ -97,9 +92,10 @@ int main(int argc, char * argv[])
                     argumento++;
                 }
                 bAND(tabela, palavras, palavra);
-            //}
-        }
-        else if (terminal[1] == "-pC")
+            }
+                
+        }/**/
+        if (terminal[1] == "-pC")
         {
             if (terminal[2] != "-tT")
             {
@@ -129,7 +125,7 @@ int main(int argc, char * argv[])
                 //listar por ordem alfabetica do nome do arquivo com tempo de busca
             }
         }
-    }
+    //}
 
     return 0;
 }
