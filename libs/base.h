@@ -11,6 +11,8 @@ void inserirNaBase(Lista, Arquivo);
 
 void removerDaBase(Lista, Arquivo);
 
+void removerDaBase(Lista, std::string);
+
 void listarInsercao(Lista);
 
 void listarTamanho(Lista);

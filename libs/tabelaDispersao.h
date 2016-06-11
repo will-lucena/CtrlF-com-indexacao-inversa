@@ -1,5 +1,6 @@
-#ifndef TABELADISPERSAO_H_INCLUDED
-#define TABELADISPERSAO_H_INCLUDED
+#ifndef TabelaDispersao_h
+#define TabelaDispersao_h
+
 #include <iostream>
 #include <fstream>
 #include <sstream>
@@ -9,18 +10,21 @@
 #include "lista.h"
 #include "base.h"
 
-struct Tpexiste
+#define REMOVIDO "??????"
+#define TAMANHO_INICIAL 800
+
+struct tpExiste
 {
 	std::string* arquivos;
 	std::string* linhas;
 };
-typedef Tpexiste* ondeExiste;
+typedef tpExiste* ondeExiste;
 
 struct tpDispersao
 {
 	int qtdArquivos;
 	int qtdPalavras;	
-	int tamanhoTabela;
+	int tamanho;
 	ondeExiste *item;
 	std::string *chave;
 	
@@ -33,12 +37,15 @@ void showTabela(TabelaDispersao);
 ondeExiste criarOndeExiste();
 TabelaDispersao criarTabela(int);
 TabelaDispersao preProcessamento(TabelaDispersao, std::string, Lista);
-bool inserirTabela(TabelaDispersao,std::string,std::string,std::string);
-TabelaDispersao RedimensionarTabela(TabelaDispersao,int);
-TabelaDispersao ReduzirTabela(TabelaDispersao);
-TabelaDispersao ExpandirTabela(TabelaDispersao);
+TabelaDispersao inserirNaTabela(TabelaDispersao,std::string,std::string,std::string);
+TabelaDispersao redimensionarTabela(TabelaDispersao,int);
+TabelaDispersao reduzirTabela(TabelaDispersao);
+TabelaDispersao expandirTabela(TabelaDispersao);
 void geraLog(TabelaDispersao);
-TabelaDispersao carregarLog();
+TabelaDispersao carregarLog(const char*);
+bool removerDaTabela(TabelaDispersao, std::string, Lista);
+bool verificaArquivo(TabelaDispersao, std::string);
+void limparTabela(TabelaDispersao tabela);
+TabelaDispersao clonarTabela(TabelaDispersao tabela);
 
-
-#endif //TABELADISPERSAO_H_INCLUDED
+#endif //TabelaDispersao_h
