@@ -3,7 +3,7 @@
 Projeto das disciplinas de Estrutura de Dados Básica I (EDB) e Linguagem de Programação I (LP) que teve como proposta fazer uma aplicação com dois modos distintos implementados em C++...
 
 Modo 1: Gerenciamento de base
-  Criar uma base de dados pre-processada com o uso de indexação (foi adotado a indexação inversa) onde cada ao inserir um arquivo novo a aplicação deveria salvar todas as palavras do mesmo para agilizar buscas. 
+  Criar uma base de dados pre-processada com o uso de indexação (foi adotado a indexação inversa) onde ao inserir um arquivo novo a aplicação deveria salvar todas as palavras do mesmo para agilizar buscas. 
   O modo de gerenciamento insere (um ou mais arquivos passados via terminal), remove (um ou mais arquivos passados via terminal) e lista todos os arquivos da base por ordem de inserção do arquivo, por ordem alfabética dos nomes dos arquivos e pela quantidade de palavras de cada arquivo.
   
 Modo 2: Busca de palavras
