@@ -1,15 +1,27 @@
-#ifndef busca_h
-#define busca_h
+#ifndef Busca_h
+#define Busca_h
 
-#include <iostream>
 #include <fstream>
 
-#include "tabelaDispersao.h"
+#include "structs.h"
+#include "lista.h"
 
-using namespace std;
+#define REMOVIDO "??????"
 
-void bAND(TabelaDispersao, string*, int);
+void bOR(std::string*, int, TabelaDispersao);
 
-void mostrarLinha(ondeExiste palavra, int* linhas, int quantasLinhas, int arquivo);
+void bAND(std::string*, int, TabelaDispersao);
+
+ondeExiste* quantidadeDeEspacos(TabelaDispersao, std::string*, int);
+
+int* verificarArquivo(std::string, std::string, int*);
+
+int verificarArquivo(std::string, std::string*, int);
+
+void showLinha(ondeExiste*, int, TabelaDispersao);
+
+void showLinha(ondeExiste*, int, int);
+
+std::string linhaArquivo(std::string, int);
 
 #endif

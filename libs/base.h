@@ -1,8 +1,7 @@
 #ifndef Base_h
 #define Base_h
 
-#include <string>
-
+#include "structs.h"
 #include "lista.h"
 
 Lista carregarBase(const char*);
@@ -25,4 +24,6 @@ void selectionSortDecrescente(Lista);
 
 void selectionSortCrescente(Lista);
 
-#endif //Base_h
+std::string toLowerCase(std::string);
+
+#endif
