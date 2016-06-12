@@ -1,4 +1,5 @@
 #include "libs/tabelaDispersao.h"
+#include "libs/funcoesBasicas.h"
 
 /**
  * Funcao para criar uma instancia da struct ondeExiste
@@ -110,7 +111,7 @@ void limparTabela(TabelaDispersao tabela)
 	tabela->qtdArquivos = 0;
 	tabela->qtdPalavras = 0;
 }
-//* //	VERSAO NOVA
+/* //	VERSAO NOVA
 TabelaDispersao redimensionarTabela(TabelaDispersao tabela, int tamanho)
 {		
     TabelaDispersao clone = clonarTabela(tabela);
@@ -137,7 +138,7 @@ TabelaDispersao redimensionarTabela(TabelaDispersao tabela, int tamanho)
     return tabela;
 }
 /**/
-/*  VERSAO ANTIGA
+//*  VERSAO ANTIGA
 TabelaDispersao redimensionarTabela(TabelaDispersao tabela, int tamanho)
 {		
     TabelaDispersao novaTabela = new tpDispersao;
@@ -198,13 +199,9 @@ TabelaDispersao inserirNaTabela(TabelaDispersao tabela, std::string arquivo, std
 				{				
 					if((long) tabela->item[hash]->linhas[indexArquivo].find(" " + linha + " ") == -1)
 					{																	
-						tabela->item[hash]->linhas[indexArquivo] += (linha + " ");						
-						return tabela;																			
+						tabela->item[hash]->linhas[indexArquivo] += (linha + " ");																								
 					}
-					else
-					{
-						return tabela;
-					}
+					return tabela;
 				}				
 			}
 
@@ -251,52 +248,48 @@ bool arquivoJaExiste(TabelaDispersao tabela, std::string arquivo)
  * @param lista -> lista que serve como buffer da base de dados
  * @return true -> se conseguir remover todas as palavras do arquivo da tabela || false -> se o arquivo for invalido
  */
-bool removerDaTabela(TabelaDispersao tabela, std::string arquivo, Lista lista)
+TabelaDispersao removerDaTabela(TabelaDispersao tabela, std::string arquivo, Lista lista)
 {				
-	int arquivoPresente;	
+	int arquivosQueTinhamAPalavra;
+	bool foiRemovido = false;	
 	if(arquivoJaExiste(tabela,arquivo))
 	{		
 		for(int index = 0; index < tabela->tamanho; index++)
 		{
-			arquivoPresente = 0;
+			arquivosQueTinhamAPalavra = 0;
 			if(tabela->chave[index] != "" && tabela->chave[index] != REMOVIDO)
 			{			
-				for(int indexArquivo = 0; indexArquivo < 50; indexArquivo++)
+				for(int indexArquivo = 0; indexArquivo < tabela->qtdArquivos; indexArquivo++)
 				{	
 					if(tabela->item[index]->arquivos[indexArquivo] != "" && tabela->item[index]->arquivos[indexArquivo] != REMOVIDO)
 					{				
-						arquivoPresente++;											
+						arquivosQueTinhamAPalavra++;											
 						if((long) tabela->item[index]->arquivos[indexArquivo].find(arquivo) != -1)
 						{							
 							tabela->item[index]->arquivos[indexArquivo] = REMOVIDO;
 							tabela->item[index]->linhas[indexArquivo] = REMOVIDO;								
-							tabela->qtdPalavras--;
-							arquivoPresente--;		
+							tabela->qtdPalavras--;		
 						}			
 					}		
 				}					
-				if(arquivoPresente == 0)
+				if(arquivosQueTinhamAPalavra == tabela->qtdArquivos)
 				{
 					tabela->chave[index] = REMOVIDO;						
 				}				
 			}											
+		}										
+		if(tabela->qtdPalavras < tabela->tamanho * 0.10)
+		{								
+			tabela = reduzirTabela(tabela);									
 		}					
-		if(!arquivoJaExiste(tabela,arquivo))
-		{							
-			if(tabela->qtdPalavras < tabela->tamanho * 0.10)
-			{								
-				tabela = reduzirTabela(tabela);									
-			}					
-			tabela->qtdArquivos--;
-			removerDaBase(lista, arquivo);
-			geraLog(tabela);								
-			return true;				
-		}
+		tabela->qtdArquivos--;
+		removerDaBase(lista, arquivo);								
+		return tabela;				
 	}
 	else
 	{
 		std::cout << "\t>> Arquivo " << arquivo << " nao estava na base de buscas." << std::endl;
-		return false;
+		return NULL;
 	}	
 }
 
@@ -309,8 +302,11 @@ bool removerDaTabela(TabelaDispersao tabela, std::string arquivo, Lista lista)
  */
 TabelaDispersao preProcessamento(TabelaDispersao tabela, std::string nomeArquivo, Lista lista)
 {
-    removerDaTabela(tabela, nomeArquivo, lista);
-    std::string linhas;
+    if (arquivoJaExiste(tabela, nomeArquivo))
+    {
+    	tabela = removerDaTabela(tabela, nomeArquivo, lista);
+    }
+    std::string linha;
     std::string palavra;        
     int linhaAtual = 0, contadorDePalavras = 0;
     std::ifstream buffer(nomeArquivo);
@@ -319,21 +315,18 @@ TabelaDispersao preProcessamento(TabelaDispersao tabela, std::string nomeArquivo
     {        	
     	while (!buffer.eof())
     	{
-    		getline(buffer, linhas);
-    		linhas += " ";
+    		getline(buffer, linha);
+    		linha = linha + " ";
     		linhaAtual++;
-    		for(int indexLinha = 0; indexLinha < linhas.length(); indexLinha++)
+    		for(int indexLinha = 0; indexLinha < linha.length(); indexLinha++)
     		{  
-    			if(!ispunct(linhas[indexLinha]) && !isspace(linhas[indexLinha]))
+    			if(!ispunct(linha[indexLinha]) && !isspace(linha[indexLinha]))
     			{
-    				palavra = palavra + linhas[indexLinha];       				   			
+    				palavra = palavra + linha[indexLinha];       				   			
     			}
     			else
     			{         				
-    				for(int indexPalavra = 0; indexPalavra < palavra.length(); indexPalavra++)
-    				{
-				        palavra[indexPalavra] = tolower(palavra[indexPalavra]);        
-				    } 		    			
+    				palavra = toLowerCase(palavra);		    			
     				tabela = inserirNaTabela(tabela, nomeArquivo, palavra, std::to_string(linhaAtual));
     				contadorDePalavras++;      				    				     		    				
     				palavra = "";
@@ -351,8 +344,7 @@ TabelaDispersao preProcessamento(TabelaDispersao tabela, std::string nomeArquivo
     	arquivo->quantidadeDePalavras = contadorDePalavras;
     	inserirNaBase(lista, arquivo);	
 
-    	buffer.close();         	 
-    	geraLog(tabela);    	  
+    	buffer.close();         	   	  
     }
     else
     {

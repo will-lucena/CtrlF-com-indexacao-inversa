@@ -1,4 +1,3 @@
-#include <fstream>
 #include "libs/lista.h"
 
 /**

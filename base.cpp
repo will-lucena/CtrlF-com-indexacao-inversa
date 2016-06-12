@@ -1,6 +1,4 @@
-#include <iostream>
 #include <fstream>
-#include <sstream>
 
 #include "libs/base.h"
 
@@ -145,7 +143,9 @@ void removerDaBase(Lista lista, Arquivo arquivo)
         base.close();
     }
 }
-
+/*
+ *@override para remover pelo caminho do arquivo
+ */
 void removerDaBase(Lista lista, std::string arquivo)
 {
     bool removido = false;
@@ -259,6 +259,16 @@ void selectionSortDecrescente(Lista lista)
  * @param lista -> lista a ser ordenada
  * @return void
  */
+
+std::string toLowerCase(std::string palavra)
+{
+    for (int i = 0; i < palavra.length(); i++)
+    {
+        palavra[i] = tolower(palavra[i]);
+    }
+    return palavra;
+}
+
 void selectionSortCrescente(Lista lista)
 {
     for (No busca = lista->cabeca->proximo; busca != lista->cauda; busca = busca->proximo)
@@ -266,7 +276,9 @@ void selectionSortCrescente(Lista lista)
         No menor = busca;
         for (No aux = busca->proximo; aux != lista->cauda; aux = aux->proximo)
         {
-            if (aux->conteudo->caminho < menor->conteudo->caminho)
+
+
+            if (toLowerCase(aux->conteudo->caminho) < toLowerCase(menor->conteudo->caminho))
             {
                 menor = aux;
             }
