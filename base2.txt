@@ -1,0 +1,8 @@
+nao	0
+nao	0
+nao	0
+nao	0
+nao	0
+nao	0
+nao	0
+sim	0
