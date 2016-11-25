@@ -1,164 +1,211 @@
-#include <getopt.h>
-#include <iostream>
-#include <sstream>
 #include <algorithm>
+#include <chrono>
 
-#include "base.h"
-#include "tabelaDispersao.h"
+#include "libs/base.h"
+#include "libs/tabelaDispersao.h"
+#include "libs/busca.h"
 
-
-using namespace std;
+using namespace std::chrono;
 
 int main(int argc, char * argv[])
 {
-	//TabelaDispersao tabela = new tpDispersao;	
-	//tabela = preProcessamento(tabela,"arquivo.txt");
-	//tabela = preProcessamento(tabela,"arquivo2.txt");	
-	//geraLog(tabela);
-	//showTabela(tabela);
-	//*	
-    bool inserirFlag = false;
-    bool removerFlag = false;
-    bool liFlag = false;
-    bool laFlag = false;
-    bool ltFlag = false;
-    bool bANDFlag = false;
-    bool bORFlag = false;
-    bool pAFlag = false;
-    bool pCFlag = false;
-    bool pIFlag = true;
-    bool tTFlag = false;
-    bool tFFlag = true;
+    std::string terminal[argc-1];
+    int j = 1;
+    long double duracao;
 
-    const struct option opcoes[] = {
-        {"i", required_argument, (int*)&inserirFlag, true},
-        {"r", required_argument, (int*)&removerFlag, true},
-        {"li", no_argument, (int*)&liFlag, true},
-        {"la", no_argument, (int*)&laFlag, true},
-        {"lt", no_argument, (int*)&ltFlag, true},
-        {"bAND", required_argument, (int*)&bANDFlag, true},
-        {"bOR", required_argument, (int*)&bORFlag, true},
-        {"pA", required_argument, (int*)&pAFlag, true},
-        {"pC", required_argument, (int*)&pCFlag, true},
-        {"pI", required_argument, (int*)&pIFlag, true},
-        {"tT", no_argument, (int*)&tTFlag, true},
-        {"tF", no_argument, (int*)&tFFlag, true},
-        {NULL, 0, 0, 0}
-    };
 
-    int index = 0;
-
-    Lista lista = carregarBase("base.txt");
-    while (getopt_long_only(argc, argv, "", opcoes, &index) != -1)
+    for(int i = 0; i < argc-1; i++)
     {
-        if (liFlag || laFlag || ltFlag)
+        terminal[i] = argv[j];
+        j++;
+    } 
+    
+    Lista lista = carregarBase("arquivos_gerados/base.txt");
+    TabelaDispersao tabela = carregarLog("arquivos_gerados/Log.txt");
+    
+    if (terminal[0] == "-i")
+    {
+        int argumento = 1;
+        while(argumento < argc-1)
+        { 
+            tabela = preProcessamento(tabela,terminal[argumento], lista);
+            argumento++;
+        }
+        geraLog(tabela);
+    }
+    else if (terminal[0] == "-r")
+    {
+        int argumento = 1;
+        while(argumento < argc-1)
+        { 
+            tabela = removerDaTabela(tabela,terminal[argumento], lista);
+            argumento++;
+        }
+        geraLog(tabela);
+    }
+    else if (terminal[0] == "-li")
+    {
+        listarInsercao(lista);
+    }
+
+    else if (terminal[0] == "-la")
+    {
+        listarAlfabetica(lista);
+    }
+
+    else if (terminal[0] == "-lt")
+    {
+        listarTamanho(lista);
+    }
+    else if (terminal[0] == "-bAND")
+    {
+        if (terminal[1] == "-pI")
         {
-            if (liFlag)
+            if (terminal[2] == "-tT")
             {
+                int argumento = 3, palavra = 0;
+                std::string palavras[argc-3];
+                while (argumento < argc-1)
+                {
+                    palavras[palavra] = terminal[argumento];
+                    palavra++;
+                    argumento++;
+                }
 
-            }
-            else if (laFlag)
-            {
+                high_resolution_clock::time_point t1 = high_resolution_clock::now();
+                bAND(palavras, palavra, tabela);
+                high_resolution_clock::time_point t2 = high_resolution_clock::now();
 
+                duracao = duration<long double, std::micro>(t2 - t1).count();
+                std::cout << duracao << std::endl;
             }
             else
             {
-
+                int argumento = 2, palavra = 0;
+                std::string palavras[argc-2];
+                while (argumento < argc-1)
+                {
+                    palavras[palavra] = terminal[argumento];
+                    palavra++;
+                    argumento++;
+                }
+                bAND(palavras, palavra, tabela);
             }
+                
         }
-        else if (inserirFlag)
+        else if (terminal[1] != "-pA" && terminal[1] != "-pC")
         {
-            string arg = string(optarg);
-            stringstream ss(arg);
-            string item;
-            int numeroDeVirgulas = std::count(arg.begin(), arg.end(), ',');
-            string arquivos[numeroDeVirgulas + 1];
-
-            int index = 0;
-            while (getline(ss, item, ',')) {
-                arquivos[index] = item;
-                index++;
-            }
-
-            inserir(lista, arquivos, index);
-        }
-        else if (removerFlag)
-        {
-
-        }
-        else if (bANDFlag)
-        {
-            if (pAFlag)
+            if (terminal[1] == "-tT")
             {
-                if (tTFlag)
+                int argumento = 2, palavra = 0;
+                std::string palavras[argc-2];
+                while (argumento < argc-1)
                 {
-                    
+                    palavras[palavra] = terminal[argumento];
+                    palavra++;
+                    argumento++;
                 }
-                else
-                {
-                    
-                }
-            }
-            else if (pCFlag)
-            {
-                if (tTFlag)
-                {
-                    
-                }
-                else
-                {
 
-                }
+                high_resolution_clock::time_point t1 = high_resolution_clock::now();
+                bAND(palavras, palavra, tabela);
+                high_resolution_clock::time_point t2 = high_resolution_clock::now();
+
+                duracao = duration<long double, std::micro>(t2 - t1).count();
+                std::cout << duracao << std::endl;
             }
             else
             {
-                if (tTFlag)
+               int argumento = 1, palavra = 0;
+                std::string palavras[argc-2];
+                while (argumento < argc-1)
                 {
-                    
+                    palavras[palavra] = terminal[argumento];
+                    palavra++;
+                    argumento++;
                 }
-                else
-                {
-                    
-                }
+                bAND(palavras, palavra, tabela);
             }
         }
-        else if (bORFlag)
+        else
         {
-            if (pAFlag)
-            {
-                if (tTFlag)
-                {
-                    
-                }
-                else
-                {
-                    
-                }
-            }
-            else if (pCFlag)
-            {
-                if (tTFlag)
-                {
-                    
-                }
-                else
-                {
-                    
-                }
-            }
-            else
-            {
-                if (tTFlag)
-                {
-                    
-                }
-                else
-                {
-                    
-                }
-            }
+            std::cout << "Metodo de listagem " << terminal[1] << " nao foi implementado" << std::endl;
         }
     }
-    //*/
+
+    else if (terminal[0] == "-bOR")
+    {
+        if (terminal[1] == "-pI")
+        {
+            if (terminal[2] == "-tT")
+            {
+                int argumento = 3, palavra = 0;
+                std::string palavras[argc-3];
+                while (argumento < argc-1)
+                {
+                    palavras[palavra] = terminal[argumento];
+                    palavra++;
+                    argumento++;
+                }
+
+                high_resolution_clock::time_point t1 = high_resolution_clock::now();
+                bOR(palavras, palavra, tabela);
+                high_resolution_clock::time_point t2 = high_resolution_clock::now();
+
+                duracao = duration<long double, std::micro>(t2 - t1).count();
+                std::cout << duracao << std::endl;
+            }
+            else
+            {
+                int argumento = 2, palavra = 0;
+                std::string palavras[argc-2];
+                while (argumento < argc-1)
+                {
+                    palavras[palavra] = terminal[argumento];
+                    palavra++;
+                    argumento++;
+                }
+                bOR(palavras, palavra, tabela);
+            }
+                
+        }
+        else if (terminal[1] != "-pA" && terminal[1] != "-pC")
+        {
+            if (terminal[1] == "-tT")
+            {
+                int argumento = 2, palavra = 0;
+                std::string palavras[argc-2];
+                while (argumento < argc-1)
+                {
+                    palavras[palavra] = terminal[argumento];
+                    palavra++;
+                    argumento++;
+                }
+
+                high_resolution_clock::time_point t1 = high_resolution_clock::now();
+                bOR(palavras, palavra, tabela);
+                high_resolution_clock::time_point t2 = high_resolution_clock::now();
+
+                duracao = duration<long double, std::micro>(t2 - t1).count();
+                std::cout << duracao << std::endl;
+            }
+            else
+            {
+                int argumento = 1, palavra = 0;
+                std::string palavras[argc-2];
+                while (argumento < argc-1)
+                {
+                    palavras[palavra] = terminal[argumento];
+                    palavra++;
+                    argumento++;
+                }
+                bOR(palavras, palavra, tabela);
+            }
+        }
+        else
+        {
+            std::cout << "Metodo de listagem " << terminal[1] << " nao foi implementado" << std::endl;
+        }
+    }
+
     return 0;
 }
